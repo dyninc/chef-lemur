@@ -16,3 +16,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include_recipe("lemur::dependencies")
+include_recipe("lemur::nginx")
+include_recipe("lemur::virtualenv")
+include_recipe("lemur::lemur")
+include_recipe("lemur::config")
+#include_recipe("lemur::postgres")

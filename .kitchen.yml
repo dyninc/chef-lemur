@@ -9,8 +9,10 @@ verifier:
   name: inspec
 
 platforms:
-  - name: ubuntu-16.04
-  - name: centos-7.2
+  - name: ubuntu-14.04
+    driver_config:
+      box: bento/ubuntu-14.04
+      box_url: https://atlas.hashicorp.com/bento/boxes/ubuntu-14.04
 
 suites:
   - name: default
