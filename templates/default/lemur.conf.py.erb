@@ -1,0 +1,60 @@
+<%
+  vc = node["lemur"]["virtualenv"]
+  lc = node["lemur"]["lemur"]
+%>
+
+# This is just Python which means you can inherit and tweak settings
+
+import os
+_basedir = os.path.abspath(os.path.dirname(__file__))
+
+ADMINS = frozenset([<%= lc["config"]["admins"].map {|x| "'#{x}'"}.join(',') %>])
+
+THREADS_PER_PAGE = 8
+
+# General
+
+# These will need to be set to `True` if you are developing locally
+CORS = False
+debug = False
+
+# this is the secret key used by flask session management
+SECRET_KEY = open('<%= ::File.join(vc["home"], ".lemur", "flask_secret_key") %>').read()
+
+# You should consider storing these separately from your config
+LEMUR_TOKEN_SECRET = open('<%= ::File.join(vc["home"], ".lemur", "lemur_token_secret") %>').read()
+LEMUR_ENCRYPTION_KEYS = open('<%= ::File.join(vc["home"], ".lemur", "lemur_encryption_keys") %>').read()
+
+# this is a list of domains as regexes that only admins can issue
+LEMUR_RESTRICTED_DOMAINS = [<%= lc["config"]["lemur_restricted_domains"].map {|x| "'#{x}'"}.join(',') %>]
+
+# Mail Server
+
+LEMUR_EMAIL = '<%= lc["config"]["lemur_email"] %>'
+LEMUR_SECURITY_TEAM_EMAIL = [<%= lc["config"]["lemur_security_team_email"].map {|x| "'#{x}'"}.join(',') %>]
+
+# Certificate Defaults
+
+LEMUR_DEFAULT_COUNTRY = '<%= lc["config"]["lemur_default_country"] %>'
+LEMUR_DEFAULT_STATE = '<%= lc["config"]["lemur_default_state"] %>'
+LEMUR_DEFAULT_LOCATION = '<%= lc["config"]["lemur_default_location"] %>'
+LEMUR_DEFAULT_ORGANIZATION = '<%= lc["config"]["lemur_default_organization"] %>'
+LEMUR_DEFAULT_ORGANIZATIONAL_UNIT = '<%= lc["config"]["lemur_default_organizational_unit"] %>'
+
+# Authentication Providers
+ACTIVE_PROVIDERS = [<%= lc["config"]["active_providers"].map {|x| "'#{x}'"}.join(',') %>]
+
+# Logging
+
+LOG_LEVEL = "<%= lc["config"]["log_level"] %>"
+LOG_FILE = "<%= lc["config"]["log_file"] %>"
+
+# Database
+
+# modify this if you are not using a local database
+<%
+  pieces = lc["config"]["sqlalchemy_database_uri"]
+  auth = "#{pieces["user"]}:#{::File.read(::File.join(vc["home"], ".lemur", "postgres_password"))}"
+  uri = "#{pieces["scheme"]}#{auth}@#{pieces["host"]}:#{pieces["port"]}/#{pieces["database"]}"
+%>
+SQLALCHEMY_DATABASE_URI = '<%= uri %>'
