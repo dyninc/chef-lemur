@@ -16,3 +16,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+node.default["nginx"]["default_site_enabled"] = false
+include_recipe("nginx::default") if node["lemur"]["feature_flags"]["nginx"]
+
+template "#{node["nginx"]["dir"]}/sites-available/lemur" do
+  source "nginx-site.conf.erb"
+  notifies :restart, "service[nginx]"
+end
+
+nginx_site "lemur" do 
+  enable true
+  only_if { node["lemur"]["feature_flags"]["nginx"] }
+end

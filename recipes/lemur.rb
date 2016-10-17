@@ -44,4 +44,14 @@ bash "lemur-develop" do
     make develop
   EOH
   environment "HOME" => vc["home"]
+  notifies :restart, "service[lemur]"
+end
+
+template "/etc/init/lemur.conf" do
+  source "lemur.upstart.conf.erb"
+  notifies :restart, "service[lemur]"
+end
+
+service "lemur" do
+  action [:enable, :start]
 end

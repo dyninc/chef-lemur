@@ -32,4 +32,5 @@ include_recipe("lemur::secrets")
 template ::File.join(vc["home"], ".lemur", "lemur.conf.py") do
   source "lemur.conf.py.erb"
   sensitive true
+  notifies :restart, "service[lemur]"
 end

@@ -18,6 +18,7 @@
 
 dc = node["lemur"]["lemur"]["config"]["sqlalchemy_database_uri"]
 vc = node["lemur"]["virtualenv"]
+lc = node["lemur"]["lemur"]
 
 include_recipe("postgresql::server") if node["lemur"]["feature_flags"]["postgres"]
 include_recipe("database::postgresql") if node["lemur"]["feature_flags"]["postgres"]
@@ -28,18 +29,35 @@ postgres_connection_info = {
   :username  => "postgres"
 }
 
-# create a postgresql database
+# create a postgresql database for lemur
 postgresql_database dc["database"] do
   connection postgres_connection_info
   action :create
   only_if { node["lemur"]["feature_flags"]["postgres"] }
+  notifies :run, "bash[lemur-initialize]"
 end
 
-# Create a postgresql user but grant no privileges
+# Create a postgresql user for lemur
 postgresql_database_user dc["user"] do
   connection postgres_connection_info
   password ::File.read(::File.join(vc["home"], ".lemur", "postgres_password"))
   database_name dc["database"]
-  action     :create
+  action :create
+  only_if { node["lemur"]["feature_flags"]["postgres"] }
+end
+
+# Initialize Lemur database
+bash "lemur-initialize" do
+  action :nothing
+  user vc["user"]
+  group vc["group"]
+  cwd ::File.join(vc["home"], lc["app"])
+  code <<-EOH
+    source #{::File.join(vc["home"], vc["venv"], "bin", "activate")}
+    lemur init
+    touch #{::File.join(vc["home"], ".lemur", "db_initialized")}
+  EOH
+  creates ::File.join(vc["home"], ".lemur", "db_initialized")
+  environment "HOME" => vc["home"]
   only_if { node["lemur"]["feature_flags"]["postgres"] }
 end

@@ -44,6 +44,7 @@ default["lemur"]["lemur"] = {
   "repository" => "https://github.com/neilschelly/lemur",
   "revision" => "HEAD",
   "app" => "/app",
+  "config_template_cookbook" => "lemur",
   "config" => {
     "admins" => [],
     "lemur_restricted_domains" => [],
@@ -65,4 +66,10 @@ default["lemur"]["lemur"] = {
       "database" => "lemur"
     }
   }
+}
+
+default["lemur"]["nginx"] = {
+  "siteconfig_template" => "site.conf.erb",
+  "siteconfig_template_cookbook" => "lemur",
+
 }
