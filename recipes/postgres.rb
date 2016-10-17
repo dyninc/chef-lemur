@@ -41,4 +41,5 @@ postgresql_database_user dc["user"] do
   password ::File.read(::File.join(vc["home"], ".lemur", "postgres_password"))
   database_name dc["database"]
   action     :create
+  only_if { node["lemur"]["feature_flags"]["postgres"] }
 end

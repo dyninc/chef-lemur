@@ -22,6 +22,8 @@
 # it easier for folks wrapping this cookbook to populate these secrets without
 # storing secrets in node attributes.
 
+require "securerandom"
+
 vc = node["lemur"]["virtualenv"]
 
 file ::File.join(vc["home"], ".lemur", "flask_secret_key") do
@@ -51,6 +53,8 @@ file ::File.join(vc["home"], ".lemur", "lemur_encryption_keys") do
   sensitive true
 end
 
+# The run_action is here to ensure this secret is written at compile time,
+# and then it will be available to other resources for reading.
 file ::File.join(vc["home"], ".lemur", "postgres_password") do
   user vc["user"]
   group vc["group"]

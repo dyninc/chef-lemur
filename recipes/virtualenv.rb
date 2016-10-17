@@ -18,10 +18,12 @@
 
 vc = node["lemur"]["virtualenv"]
 
+# The run_action is here to ensure this user and group are created in advance
+# of the lemur::secrets files getting configured on disk.
 group vc["group"] do
   gid vc["gid"]
   system true
-end
+end.run_action(:create)
 
 user vc["user"] do
   comment "Lemur system user"
@@ -30,7 +32,7 @@ user vc["user"] do
   uid vc["uid"]
   gid vc["group"]
   home vc["home"]
-end
+end.run_action(:create)
 
 # FIXME: Can't use system provider, since lemur user needs to install python
 # libraries. Not sure portable_pypy is the answer, but seems most likely.
