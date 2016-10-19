@@ -31,7 +31,7 @@ git ::File.join(vc["home"], lc["app"]) do
   group vc["group"]
   user vc["user"]
   action :sync
-  notifies :run, "bash[lemur-develop]"
+  notifies :run, "bash[lemur-develop]", :immediately
 end
 
 bash "lemur-develop" do
@@ -47,11 +47,20 @@ bash "lemur-develop" do
   notifies :restart, "service[lemur]"
 end
 
-template "/etc/init/lemur.conf" do
-  source "lemur.upstart.conf.erb"
-  notifies :restart, "service[lemur]"
+cron_d "lemur-sync" do
+  minute  "*/15"
+  command "/home/lemur/venv/bin/lemur sync -s all"
+  user    vc["user"]
 end
 
-service "lemur" do
-  action [:enable, :start]
+cron_d "lemur-check-revoked" do
+  minute "*/15"
+  command "/home/lemur/venv/bin/lemur check_revoked"
+  user vc["user"]
+end
+
+cron_d "lemur-notify" do
+  minute "*/15"
+  command "/home/lemur/venv/bin/lemur notify"
+  user vc["user"]
 end

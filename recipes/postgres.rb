@@ -34,7 +34,6 @@ postgresql_database dc["database"] do
   connection postgres_connection_info
   action :create
   only_if { node["lemur"]["feature_flags"]["postgres"] }
-  notifies :run, "bash[lemur-initialize]"
 end
 
 # Create a postgresql user for lemur
@@ -46,18 +45,23 @@ postgresql_database_user dc["user"] do
   only_if { node["lemur"]["feature_flags"]["postgres"] }
 end
 
-# Initialize Lemur database
-bash "lemur-initialize" do
-  action :nothing
+# Initialize Lemur database with lemur/lemur default credentials
+package "expect"
+script "lemur-initialize" do
+  interpreter "expect"
+  action :run
   user vc["user"]
   group vc["group"]
-  cwd ::File.join(vc["home"], lc["app"])
-  code <<-EOH
-    source #{::File.join(vc["home"], vc["venv"], "bin", "activate")}
-    lemur init
-    touch #{::File.join(vc["home"], ".lemur", "db_initialized")}
+  cwd ::File.join(vc["home"], lc["app"], "lemur")
+  code <<-EOH 
+    log_file #{::File.join(vc["home"], ".lemur", "db_init.log")}
+    spawn #{::File.join(vc["home"], vc["venv"], "bin", "lemur")} init
+    set timeout 30
+    expect "Password: " { send "lemur\r" }       
+    expect "Confirm Password: " { send "lemur\r" }
+    expect eof
   EOH
-  creates ::File.join(vc["home"], ".lemur", "db_initialized")
+  creates ::File.join(vc["home"], ".lemur", "db_init.log")
   environment "HOME" => vc["home"]
   only_if { node["lemur"]["feature_flags"]["postgres"] }
 end

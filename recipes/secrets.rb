@@ -31,7 +31,7 @@ file ::File.join(vc["home"], ".lemur", "flask_secret_key") do
   group vc["group"]
   mode "0600"
   action :create_if_missing
-  content ::SecureRandom.random_bytes(64)
+  content ::SecureRandom.base64(64)
   sensitive true
 end
 
@@ -40,7 +40,7 @@ file ::File.join(vc["home"], ".lemur", "lemur_token_secret") do
   group vc["group"]
   mode "0600"
   action :create_if_missing
-  content ::SecureRandom.random_bytes(64)
+  content ::SecureRandom.base64(64)
   sensitive true
 end
 
@@ -49,7 +49,8 @@ file ::File.join(vc["home"], ".lemur", "lemur_encryption_keys") do
   group vc["group"]
   mode "0600"
   action :create_if_missing
-  content ::SecureRandom.random_bytes(64)
+  # Python fernet library says: "Fernet key must be 32 url-safe base64-encoded bytes."
+  content ::SecureRandom.base64(32)
   sensitive true
 end
 
@@ -62,4 +63,4 @@ file ::File.join(vc["home"], ".lemur", "postgres_password") do
   action :create_if_missing
   content ::SecureRandom.hex(32)
   sensitive true
-end.run_action(:create)
+end.run_action(:create_if_missing)

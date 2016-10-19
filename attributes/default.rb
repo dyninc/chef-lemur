@@ -36,8 +36,7 @@ default["lemur"]["virtualenv"] = {
   "pip_version" => true,
   "setuptools_version" => true,
   "wheel_version" => true,
-  "python_provider" => :system #,
-#  "url" => "https://bitbucket.org/squeaky/portable-pypy/downloads/pypy-5.4.1-linux_x86_64-portable.tar.bz2"
+  "python_provider" => :system
 }
 
 default["lemur"]["lemur"] = {
@@ -46,7 +45,7 @@ default["lemur"]["lemur"] = {
   "app" => "/app",
   "config_template_cookbook" => "lemur",
   "config" => {
-    "admins" => [],
+    "admins" => [''],
     "lemur_restricted_domains" => [],
     "lemur_email" => "lemur@example.com",
     "lemur_security_team_email" => ["lemur-security@example.com"],

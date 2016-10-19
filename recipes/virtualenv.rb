@@ -34,12 +34,9 @@ user vc["user"] do
   home vc["home"]
 end.run_action(:create)
 
-# FIXME: Can't use system provider, since lemur user needs to install python
-# libraries. Not sure portable_pypy is the answer, but seems most likely.
 python_runtime "lemur" do
   provider vc["provider"]
   version vc["version"]
-  # options vc["provider"], url: vc["url"]
 end
 
 python_virtualenv ::File.join(vc["home"], vc["venv"]) do

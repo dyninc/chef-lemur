@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: lemur
-# Recipe:: default
+# Recipe:: service
 #
 # Copyright 2016 Neil Schelly
 #
@@ -16,10 +16,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include_recipe("lemur::dependencies")
-include_recipe("lemur::virtualenv")
-include_recipe("lemur::nginx")
-include_recipe("lemur::lemur")
-include_recipe("lemur::config")
-include_recipe("lemur::postgres")
-include_recipe("lemur::service")
+template "/etc/init/lemur.conf" do
+  source "lemur.upstart.conf.erb"
+  notifies :restart, "service[lemur]"
+end
+
+service "lemur" do
+  action [:enable, :start]
+end
