@@ -12,13 +12,13 @@ _basedir = os.path.abspath(os.path.dirname(__file__))
 
 ADMINS = frozenset([<%= lc["config"]["admins"].map {|x| "'#{x}'"}.join(',') %>])
 
-THREADS_PER_PAGE = 8
+THREADS_PER_PAGE = <%= lc["config"]["threads_per_page"] %>
 
 # General
 
 # These will need to be set to `True` if you are developing locally
-CORS = False
-debug = False
+CORS = <%= lc["config"]["cors"] %>
+debug = <%= lc["config"]["debug"] %>
 
 # this is the secret key used by flask session management
 SECRET_KEY = open('<%= ::File.join(vc["home"], ".lemur", "flask_secret_key") %>').read()
@@ -31,17 +31,19 @@ LEMUR_ENCRYPTION_KEYS = open('<%= ::File.join(vc["home"], ".lemur", "lemur_encry
 LEMUR_RESTRICTED_DOMAINS = [<%= lc["config"]["lemur_restricted_domains"].map {|x| "'#{x}'"}.join(',') %>]
 
 # Mail Server
-
 LEMUR_EMAIL = '<%= lc["config"]["lemur_email"] %>'
+LEMUR_EMAIL_SENDER = '<%= lc["config"]["lemur_email_sender"] %>'
 LEMUR_SECURITY_TEAM_EMAIL = [<%= lc["config"]["lemur_security_team_email"].map {|x| "'#{x}'"}.join(',') %>]
+LEMUR_DEFAULT_EXPIRATION_NOTIFICATION_INTERVALS = [<%= lc["config"]["lemur_default_expiration_intervals"].join(',') %>]
 
 # Certificate Defaults
-
 LEMUR_DEFAULT_COUNTRY = '<%= lc["config"]["lemur_default_country"] %>'
 LEMUR_DEFAULT_STATE = '<%= lc["config"]["lemur_default_state"] %>'
 LEMUR_DEFAULT_LOCATION = '<%= lc["config"]["lemur_default_location"] %>'
 LEMUR_DEFAULT_ORGANIZATION = '<%= lc["config"]["lemur_default_organization"] %>'
 LEMUR_DEFAULT_ORGANIZATIONAL_UNIT = '<%= lc["config"]["lemur_default_organizational_unit"] %>'
+LEMUR_ALLOW_WEEKEND_EXPIRATION = <%= lc["config"]["lemur_allow_weekend_expiration"] %>
+LEMUR_DEFAULT_ISSUER_PLUGIN = "<%= lc["config"]["lemur_default_issuer_plugin"] %>"
 
 # Authentication Providers
 ACTIVE_PROVIDERS = [<%= lc["config"]["active_providers"].map {|x| "'#{x}'"}.join(',') %>]
@@ -49,7 +51,7 @@ ACTIVE_PROVIDERS = [<%= lc["config"]["active_providers"].map {|x| "'#{x}'"}.join
 # Logging
 
 LOG_LEVEL = "<%= lc["config"]["log_level"] %>"
-LOG_FILE = "<%= lc["config"]["log_file"] %>"
+LOG_FILE = "<%= ::File.join(vc["home"], lc["config"]["log_file"]) %>"
 
 # Database
 
@@ -60,3 +62,7 @@ LOG_FILE = "<%= lc["config"]["log_file"] %>"
   uri = "#{pieces["scheme"]}#{pieces["user"]}:%s@#{pieces["host"]}:#{pieces["port"]}/#{pieces["database"]}" 
 %>
 SQLALCHEMY_DATABASE_URI = "<%= uri %>" % open('<%= ::File.join(vc["home"], ".lemur", "postgres_password") %>').read()
+
+<% lc["config"]["misc_options"].each do |k,v| %>
+<%= k %>="<%= v %>"
+<% end %>

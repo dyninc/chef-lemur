@@ -19,7 +19,6 @@ suites:
     driver:
       network:
       - ["forwarded_port", {guest: 80, host: 8080}]
-      - ["forwarded_port", {guest: 8000, host: 8000}]
     run_list:
       - recipe[lemur::default]
     verifier:
