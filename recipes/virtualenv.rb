@@ -46,4 +46,14 @@ python_virtualenv ::File.join(vc["home"], vc["venv"]) do
   setuptools_version vc["setuptools_version"]
   wheel_version vc["wheel_version"]
   python "lemur"
+  notifies :run, "bash[fix-venv-perms]", :immediately
+end
+
+# FIXME: There appears to be a problem in poise-python's python_virtualenv
+# resource, where the venv directory will have some root-owned things that the
+# venv user won't be able to manage
+bash "fix-venv-perms" do
+  action :nothing
+  cwd ::File.join(vc["home"], vc["venv"]) 
+  code "/bin/chown -R #{vc["user"]}:#{vc["group"]} ."
 end
