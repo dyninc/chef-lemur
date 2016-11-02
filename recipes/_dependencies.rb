@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: lemur
-# Recipe:: nginx
+# Recipe:: _dependencies
 #
 # Copyright 2016 Neil Schelly
 #
@@ -16,18 +16,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-nc = node["lemur"]["nginx"]
+include_recipe("apt::default")
 
-node.default["nginx"]["default_site_enabled"] = false
-include_recipe("nginx::default") if node["lemur"]["feature_flags"]["nginx"]
-
-template "#{node["nginx"]["dir"]}/sites-available/lemur" do
-  source nc["siteconfig_template"]
-  cookbook nc["siteconfig_template_cookbook"]
-  notifies :restart, "service[nginx]"
-end
-
-nginx_site "lemur" do 
-  enable true
-  only_if { node["lemur"]["feature_flags"]["nginx"] }
+node["lemur"]["dependencies"].each do |pkg, ver|
+  package pkg do
+    action ver ? :install : :upgrade
+    version ver
+  end
 end

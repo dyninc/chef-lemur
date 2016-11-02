@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: lemur
-# Recipe:: service
+# Recipe:: _service
 #
 # Copyright 2016 Neil Schelly
 #

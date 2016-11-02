@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: lemur
-# Recipe:: secrets
+# Recipe:: _secrets
 #
 # Copyright 2016 Neil Schelly
 #

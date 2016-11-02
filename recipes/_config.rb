@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: lemur
-# Recipe:: dependencies
+# Recipe:: _config
 #
 # Copyright 2016 Neil Schelly
 #
@@ -16,11 +16,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include_recipe("apt::default")
 
-node["lemur"]["dependencies"].each do |pkg, ver|
-  package pkg do
-    action ver ? :install : :upgrade
-    version ver
-  end
+vc = node["lemur"]["virtualenv"]
+
+# The run_action is here to ensure this directory is created in advance
+# of the lemur::secrets files getting configured on disk.
+directory ::File.join(vc["home"], ".lemur") do
+  user vc["user"]
+  group vc["group"]
+  recursive true  
+end.run_action(:create)
+
+include_recipe("lemur::secrets")
+
+template ::File.join(vc["home"], ".lemur", "lemur.conf.py") do
+  source "lemur.conf.py.erb"
+  sensitive true
+  notifies :restart, "service[lemur]"
 end

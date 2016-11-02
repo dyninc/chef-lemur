@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: lemur
-# Recipe:: config
+# Recipe:: _nginx
 #
 # Copyright 2016 Neil Schelly
 #
@@ -16,21 +16,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+nc = node["lemur"]["nginx"]
 
-vc = node["lemur"]["virtualenv"]
+node.default["nginx"]["default_site_enabled"] = false
+include_recipe("nginx::default") if node["lemur"]["feature_flags"]["nginx"]
 
-# The run_action is here to ensure this directory is created in advance
-# of the lemur::secrets files getting configured on disk.
-directory ::File.join(vc["home"], ".lemur") do
-  user vc["user"]
-  group vc["group"]
-  recursive true  
-end.run_action(:create)
+template "#{node["nginx"]["dir"]}/sites-available/lemur" do
+  source nc["siteconfig_template"]
+  cookbook nc["siteconfig_template_cookbook"]
+  notifies :restart, "service[nginx]"
+end
 
-include_recipe("lemur::secrets")
-
-template ::File.join(vc["home"], ".lemur", "lemur.conf.py") do
-  source "lemur.conf.py.erb"
-  sensitive true
-  notifies :restart, "service[lemur]"
+nginx_site "lemur" do 
+  enable true
+  only_if { node["lemur"]["feature_flags"]["nginx"] }
 end

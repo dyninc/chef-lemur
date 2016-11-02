@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: lemur
-# Recipe:: virtualenv
+# Recipe:: _virtualenv
 #
 # Copyright 2016 Neil Schelly
 #

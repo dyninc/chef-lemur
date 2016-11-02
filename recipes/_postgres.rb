@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: lemur
-# Recipe:: postgres
+# Recipe:: _postgres
 #
 # Copyright 2016 Neil Schelly
 #
