@@ -15,10 +15,10 @@ describe port(80) do
   it { should be_listening }
 end
 
-%w{
+%w(
   postgresql
   lemur
-}.each do |svc|
+).each do |svc|
   describe service(svc) do
     it { should be_enabled }
     it { should be_running }
@@ -29,6 +29,6 @@ end
 login_cmd = "curl -X POST -d '{\"username\":\"lemur\",\"password\":\"lemur\"}' -v -H 'Content-Type: application/json' http://localhost:80/api/1/auth/login"
 # rubocop:enable LineLength
 describe command(login_cmd) do
-  its('stderr') { should match /HTTP\/1\.1 200 OK/ }
-  its('stdout') { should match /token/ }
+  its('stderr') { should match(%r{HTTP\/1\.1 200 OK}) }
+  its('stdout') { should match(/token/) }
 end

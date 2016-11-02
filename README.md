@@ -115,7 +115,37 @@ template cookbook
 
 ## Usage
 
-Put `recipe[lemur::default]` in your run list.
+1. Put `recipe[lemur::default]` in your run list.
+2. Visit http://servername to see the Lemur web UI.
+
+- or -
+
+1. Build the cookbook with `chef exec kitchen converge`.
+2. Visit http://localhost:;8080 to see the Lemur web UI.
+
+### Secrets
+
+In initial configuration, this cookbook will create a `lemur` user with the
+password `lemur` that has full admin privileges inside the lemur application.
+Please assume you should change that once you configure your alternative auth
+system and/or users.
+
+There are also 4 files created in the `/home/lemur/.lemur` directory for
+secrets used in the app itself.
+
+* `flask_secret_key`
+* `lemur_encryption_keys`
+* `lemur_token_secret`
+* `postgres_password`
+
+Those files are protected so only the `lemur` user can access them. The cookbook
+will not overwrite them if they already exist, so if you want to use different
+values for these variables, just make sure you write whatever secret data you
+want in those files before this recipe runs.
+
+I elected to do it this way to ensure the out-of-the-box experience _just
+worked_ while still allowing folks who don't trust their random number
+generators to specify their own values easily enough.
 
 ## Testing
 
@@ -123,7 +153,7 @@ These should all exit 0 for success.
 
 * `chef exec foodcritic -X test .` Chef linter
 * `chef exec rubocop` - Ruby linter
-* `chef exec rspec` - RSpec unit tests
+* `chef exec rspec -f d` - RSpec unit tests
 * `chef exec kitchen verify` -  Functional testing with inspec  
 
 ## License and Authors

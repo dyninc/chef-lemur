@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: lemur
-# Spec:: default
+# Spec:: _secrets
 #
 # Copyright 2016 Neil Schelly
 #
@@ -18,7 +18,7 @@
 
 require 'spec_helper'
 
-describe 'lemur::default' do
+describe 'lemur::_secrets' do
   context 'When all attributes are default' do
     let(:chef_run) do
       runner = ChefSpec::ServerRunner.new(platform: 'ubuntu', version: '14.04')
@@ -26,11 +26,7 @@ describe 'lemur::default' do
     end
 
     before do
-      stub_command('ls /var/lib/postgresql/9.3/main/recovery.conf').and_return(
-        0
-      )
       allow(::File).to receive(:exists?).and_call_original
-      allow(::File).to receive(:read).and_call_original
       allow(::File).to receive(:exists?).with(
         '/home/lemur/.lemur/flask_secret_key'
       ).and_return(false)
@@ -43,26 +39,18 @@ describe 'lemur::default' do
       allow(::File).to receive(:exists?).with(
         '/home/lemur/.lemur/postgres_password'
       ).and_return(false)
-      allow(::File).to receive(:read).with(
-        '/home/lemur/.lemur/postgres_password'
-      ).and_return('password')
-    end
-
-    it 'converges successfully' do
-      expect { chef_run }.to_not raise_error
     end
 
     %w(
-      _dependencies
-      _virtualenv
-      _nginx
-      _lemur
-      _config
-      _postgres
-      _service
-    ).each do |recipe|
-      it "includes #{recipe} recipe" do
-        expect(chef_run).to include_recipe("lemur::#{recipe}")
+      flask_secret_key
+      lemur_token_secret
+      lemur_encryption_keys
+      postgres_password
+    ).each do |secretfile|
+      it "creates /home/lemur/.lemur/#{secretfile}" do
+        expect(chef_run).to create_file_if_missing(
+          "/home/lemur/.lemur/#{secretfile}"
+        ).with('sensitive' => true)
       end
     end
   end
