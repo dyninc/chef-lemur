@@ -26,7 +26,7 @@ directory ::File.join(vc['home'], '.lemur') do
   recursive true
 end.run_action(:create)
 
-include_recipe('lemur::secrets')
+include_recipe('lemur::_secrets')
 
 template ::File.join(vc['home'], '.lemur', 'lemur.conf.py') do
   source 'lemur.conf.py.erb'

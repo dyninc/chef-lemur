@@ -59,8 +59,8 @@ script 'lemur-initialize' do
     log_file #{::File.join(vc['home'], '.lemur', 'db_init.log')}
     spawn #{::File.join(vc['home'], vc['venv'], 'bin', 'lemur')} init
     set timeout 30
-    expect 'Password: ' { send 'lemur\r' }
-    expect 'Confirm Password: ' { send 'lemur\r' }
+    expect "Password: " { send "lemur\r" }
+    expect "Confirm Password: " { send "lemur\r" }
     expect eof
   EOH
   creates ::File.join(vc['home'], '.lemur', 'db_init.log')
