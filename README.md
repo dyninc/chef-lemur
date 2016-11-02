@@ -117,6 +117,15 @@ template cookbook
 
 Put `recipe[lemur::default]` in your run list.
 
+## Testing
+
+These should all exit 0 for success.
+
+* `chef exec foodcritic -X test .` Chef linter
+* `chef exec rubocop` - Ruby linter
+* `chef exec rspec` - RSpec unit tests
+* `chef exec kitchen verify` -  Functional testing with inspec  
+
 ## License and Authors
 
 **Author:** Neil Schelly ([neil@neilschelly.com](mailto:neil@neilschelly.com))
