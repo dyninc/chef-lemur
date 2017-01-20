@@ -4,6 +4,16 @@ This cookbook builds a server running Netflix's lemur certificate authority
 management interface. More information, documentation, etc about Lemur can be
 found in the [Netflix GitHub rep for Lemur](https://github.com/Netflix/lemur).
 
+## Branches
+
+The master branch follows the latest development, currently 1.x.y. This can be
+to deploy the latest versions of Lemur dependent on Python3 environments.
+
+The v0.x branch is the legacy branch to support deploying Lemur in a Python2.7
+environment. The last version of lemur to support Python2.7 is 0.4.0, and
+more recent development of lemur will require following the master branch of
+this cookbook.
+
 ## Requirements
 
 ### Platforms

@@ -43,7 +43,7 @@ default['lemur']['virtualenv'] = {
 # http://lemur.readthedocs.io/en/latest/administration.html#configuration
 default['lemur']['lemur'] = {
   'repository' => 'https://github.com/Netflix/lemur',
-  'revision' => 'HEAD',
+  'revision' => 'refs/tags/0.4.0',
   'app' => '/app',
   'config_template_cookbook' => 'lemur',
   'config' => {
