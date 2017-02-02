@@ -43,12 +43,12 @@ default['lemur']['virtualenv'] = {
 # http://lemur.readthedocs.io/en/latest/administration.html#configuration
 default['lemur']['lemur'] = {
   'repository' => 'https://github.com/Netflix/lemur',
-  'revision' => 'HEAD',
+  'revision' => 'refs/heads/master',
   'app' => '/app',
   'config_template_cookbook' => 'lemur',
   'config' => {
     'threads_per_page' => '8',
-    'admins' => [''],
+    'admins' => ['lemur'],
     'lemur_restricted_domains' => [],
     'lemur_email' => 'lemur@example.com',
     'lemur_email_sender' => 'SMTP',
