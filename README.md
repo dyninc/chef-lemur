@@ -12,6 +12,20 @@ found in the [Netflix GitHub rep for Lemur](https://github.com/Netflix/lemur).
 
 Probably works with other reasonably recent Debian derivatives.
 
+### Releases
+
+# branch v0.x and 0.1.x releases
+
+This release works with deploying lemur 0.4.0 in a Python 2.7 environment.
+After 0.4.0, lemur will require Python 3.4.
+
+# branch v1.x and 1.0.0+ releases
+
+I'm working on supporting newer releases of lemur on Python 3.4 in this branch.
+It hasn't been released yet, so this branch currently deploys from
+refs/heads/master in the lemur codebase.
+
+
 ### Cookbooks
 
 * nginx cookbook to setup web UI 

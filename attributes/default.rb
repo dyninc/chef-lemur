@@ -7,10 +7,17 @@ default['lemur']['feature_flags'] = {
   'nginx' => true
 }
 
+default['lemur']['nodejs']['repo'] = {
+  'uri' => 'https://deb.nodesource.com/node_6.x',
+  'key' => 'https://deb.nodesource.com/gpgkey/nodesource.gpg.key',
+  'components' => %w{main},
+  'enable' => true
+}
+
 # Dependencies and versions
 # nil versions will automatically upgrade
 default['lemur']['dependencies'] = {
-  'nodejs-legacy' => nil,
+  'nodejs' => nil,
   'python-pip' => nil,
   'python-dev' => nil,
   'libpq-dev' => nil,
@@ -20,7 +27,6 @@ default['lemur']['dependencies'] = {
   'nginx' => nil,
   'git' => nil,
   'supervisor' => nil,
-  'npm' => nil,
   'postgresql' => nil
 }
 
@@ -32,7 +38,7 @@ default['lemur']['virtualenv'] = {
   'venv' => '/venv',
   'uid' => nil,
   'gid' => nil,
-  'version' => '2.7',
+  'version' => '3.4',
   'pip_version' => true,
   'setuptools_version' => true,
   'wheel_version' => true,
