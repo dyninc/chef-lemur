@@ -5,7 +5,7 @@ maintainer_email 'neil@neilschelly.com'
 license 'apachev2'
 description 'Installs/Configures lemur'
 long_description 'Installs/Configures lemur'
-version '1.0.2'
+version '1.0.3'
 issues_url 'https://github.com/dyninc/chef-lemur/issues' if respond_to?(:issues_url)
 source_url 'https://github.com/dyninc/chef-lemur' if respond_to?(:source_url)
 
@@ -14,7 +14,7 @@ depends 'apt'
 depends 'nginx'
 depends 'postgresql', '~> 4.0.6'
 depends 'database', '~> 6.0.0'
-depends 'cron', '~> 3.0.0'
+depends 'cron', '>= 1.4.0'
 
 # Used by nginx cookbook.
 # If unconstrained, goes to incompatible 4.x release of ohai
