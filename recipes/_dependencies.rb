@@ -18,6 +18,16 @@
 
 include_recipe('apt::default')
 
+nr = node['lemur']['nodejs']['repo']
+if nr['enable']
+  apt_repository "nodesource" do
+    uri nr['uri']
+    key nr['key']
+    components nr['components']
+    action :add
+  end
+end
+
 node['lemur']['dependencies'].each do |pkg, ver|
   package pkg do
     action ver ? :install : :upgrade
