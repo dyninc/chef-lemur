@@ -14,7 +14,7 @@ depends 'apt'
 depends 'nginx'
 depends 'postgresql', '~> 4.0.6'
 depends 'database', '~> 6.0.0'
-depends 'cron', '~> 3.0.0'
+depends 'cron', '>= 1.4.0'
 
 # Used by nginx cookbook.
 # If unconstrained, goes to incompatible 4.x release of ohai
