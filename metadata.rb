@@ -5,14 +5,14 @@ maintainer_email 'neil@neilschelly.com'
 license 'apachev2'
 description 'Installs/Configures lemur'
 long_description 'Installs/Configures lemur'
-version '1.0.3'
+version '1.0.4'
 issues_url 'https://github.com/dyninc/chef-lemur/issues' if respond_to?(:issues_url)
 source_url 'https://github.com/dyninc/chef-lemur' if respond_to?(:source_url)
 
 depends 'poise-python'
 depends 'apt'
 depends 'nginx'
-depends 'postgresql', '~> 4.0.6'
+depends 'postgresql', '>= 3.4.6'
 depends 'database', '~> 6.0.0'
 depends 'cron', '>= 1.4.0'
 
