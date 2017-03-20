@@ -5,7 +5,7 @@ maintainer_email 'neil@neilschelly.com'
 license 'apachev2'
 description 'Installs/Configures lemur'
 long_description 'Installs/Configures lemur'
-version '1.0.4'
+version '1.0.5'
 issues_url 'https://github.com/dyninc/chef-lemur/issues' if respond_to?(:issues_url)
 source_url 'https://github.com/dyninc/chef-lemur' if respond_to?(:source_url)
 
