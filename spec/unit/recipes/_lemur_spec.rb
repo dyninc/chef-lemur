@@ -33,9 +33,9 @@ describe 'lemur::_lemur' do
       expect(chef_run).to sync_git('/home/lemur/app')
     end
 
-    it 'runs `lemur develop` to setup lemur app' do
-      resource = chef_run.bash('lemur-develop')
-      expect(resource.code).to match(/make develop/)
+    it 'runs `lemur release` to setup lemur app' do
+      resource = chef_run.bash('lemur-release')
+      expect(resource.code).to match(/make release/)
       expect(resource).to do_nothing
     end
 

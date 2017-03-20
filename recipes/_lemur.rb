@@ -31,17 +31,17 @@ git ::File.join(vc['home'], lc['app']) do
   group vc['group']
   user vc['user']
   action :sync
-  notifies :run, 'bash[lemur-develop]', :immediately
+  notifies :run, 'bash[lemur-release]', :immediately
 end
 
-bash 'lemur-develop' do
+bash 'lemur-release' do
   action :nothing
   user vc['user']
   group vc['group']
   cwd ::File.join(vc['home'], lc['app'])
   code <<-EOH
     source #{::File.join(vc['home'], vc['venv'], 'bin', 'activate')}
-    make develop
+    make release
   EOH
   environment 'HOME' => vc['home']
   notifies :restart, 'service[lemur]'
